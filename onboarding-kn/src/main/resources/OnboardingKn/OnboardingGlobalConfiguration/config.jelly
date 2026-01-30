@@ -1,0 +1,57 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
+
+    <!-- =========================
+         Onboarding Plugin section
+         ========================= -->
+    <f:section title="Onboarding Plugin">
+
+        <f:entry title="Name" field="name">
+            <f:textbox/>
+        </f:entry>
+
+        <f:entry title="Description" field="description">
+            <f:textarea rows="5"/>
+        </f:entry>
+
+    </f:section>
+
+    <!-- =========================
+         Optional Connections
+         ========================= -->
+    <f:section title="Connections (Optional)">
+
+        <f:repeatable field="connections"
+                      add="Add Connection"
+                      delete="Remove Connection">
+
+            <f:entry title="URL" field="url">
+                <f:textbox/>
+            </f:entry>
+
+            <f:entry title="Username" field="username">
+                <f:textbox/>
+            </f:entry>
+
+            <f:entry title="Password" field="password">
+                <f:password/>
+            </f:entry>
+
+            <f:entry>
+                <!-- Test Connection button calls the method on the outer GlobalConfiguration -->
+                <f:validateButton
+                        title="Test Connection"
+                        progress="Testing..."
+                        method="${root.testConnection}">
+                    <f:parameter name="url" value="${it.url}"/>
+                    <f:parameter name="username" value="${it.username}"/>
+                    <f:parameter name="password" value="${it.password}"/>
+                </f:validateButton>
+            </f:entry>
+
+        </f:repeatable>
+
+    </f:section>
+
+</j:jelly>
