@@ -1,0 +1,7 @@
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <f:section title="Onboarding Build History">
+        <f:entry title="Info" description="Stores last 5 builds per category.">
+            <f:label>Nothing to configure here</f:label>
+        </f:entry>
+    </f:section>
+</j:jelly>

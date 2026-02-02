@@ -1,10 +1,6 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core"
-         xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 
-    <!-- =========================
-         Onboarding Plugin section
-         ========================= -->
     <f:section title="Onboarding Plugin">
 
         <f:entry title="Name" field="name">
@@ -12,41 +8,64 @@
         </f:entry>
 
         <f:entry title="Description" field="description">
-            <f:textarea rows="5"/>
+            <f:textarea rows="4"/>
         </f:entry>
 
     </f:section>
 
-    <!-- =========================
-         Optional Connections
-         ========================= -->
-    <f:section title="Connections (Optional)">
+    <f:section title="Categories">
 
-        <f:repeatable field="connections"
-                      add="Add Connection"
-                      delete="Remove Connection">
+        <f:repeatable field="categories" var="cat" add="Add Category" delete="Remove Category">
+
+            <f:entry title="UUID" field="uuid">
+                <f:textbox value="${cat.uuid}" readonly="true"/>
+            </f:entry>
+
+            <f:entry title="Name" field="name">
+                <f:textbox value="${cat.name}"/>
+            </f:entry>
+
+            <!-- Last 5 builds -->
+            <f:entry title="Last 5 Builds">
+                <f:table>
+                    <j:forEach var="build" items="${root.getLastBuilds(cat.uuid)}">
+                        <f:tr>
+                            <f:td>
+                                <a href="${root.urlForBuild(build)}">${build}</a>
+                            </f:td>
+                        </f:tr>
+                    </j:forEach>
+                    <f:tr if="${empty root.getLastBuilds(cat.uuid)}">
+                        <f:td>No recent builds</f:td>
+                    </f:tr>
+                </f:table>
+            </f:entry>
+
+        </f:repeatable>
+
+    </f:section>
+
+    <f:section title="Connections">
+
+        <f:repeatable field="connections" var="conn" add="Add Connection" delete="Remove Connection">
 
             <f:entry title="URL" field="url">
-                <f:textbox/>
+                <f:textbox value="${conn.url}"/>
             </f:entry>
 
             <f:entry title="Username" field="username">
-                <f:textbox/>
+                <f:textbox value="${conn.username}"/>
             </f:entry>
 
             <f:entry title="Password" field="password">
-                <f:password/>
+                <f:password value="${conn.password}"/>
             </f:entry>
 
             <f:entry>
-                <!-- Test Connection button calls the method on the outer GlobalConfiguration -->
-                <f:validateButton
-                        title="Test Connection"
-                        progress="Testing..."
-                        method="${root.testConnection}">
-                    <f:parameter name="url" value="${it.url}"/>
-                    <f:parameter name="username" value="${it.username}"/>
-                    <f:parameter name="password" value="${it.password}"/>
+                <f:validateButton title="Test Connection" method="${root.testConnection}">
+                    <f:parameter name="url" value="${conn.url}"/>
+                    <f:parameter name="username" value="${conn.username}"/>
+                    <f:parameter name="password" value="${conn.password}"/>
                 </f:validateButton>
             </f:entry>
 
